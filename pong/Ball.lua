@@ -6,10 +6,27 @@ function Ball:init(x, y, width, height)
     self.width = width
     self.height = height
 
+    -- these variables are for keeping track of our velocity on both X and Y axis
     self.dx = math.random(2) == 1 and 100 or -100
     self.dy = math.random(-50, 50)
 end
 
+function Ball:collides(box)
+    if self.x > box.x + box.width or self.x + self.width < box.x then
+        return false
+    end
+
+    if self.y > box.y + box.height or self.y + self.height < box.y then
+        return false
+    end
+
+    return true
+end
+
+--[[
+    Places the ball in the middle of the screen, with an initial random
+    velocity on both axes
+]]
 function Ball:reset()
     -- start ball's position in the middle of the screen
     self.x = VIRTUAL_WIDTH / 2 - 2
@@ -20,6 +37,9 @@ function Ball:reset()
     self.dy = math.random(-50, 50) * 1.5
 end
 
+--[[
+    Simply applies velocity to position, scaled by deltaTime
+]]
 function Ball:update(dt)
     self.x = self.x + self.dx * dt
     self.y = self.y + self.dy * dt
